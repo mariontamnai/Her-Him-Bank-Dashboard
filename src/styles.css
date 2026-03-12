@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: #f0f4f0;
+  color: #333;
+}
+
+input, button, label, p, small, span, h1, h2, h3 {
+  font-size: inherit;
+}

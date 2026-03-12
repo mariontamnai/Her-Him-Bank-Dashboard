@@ -1,0 +1,36 @@
+<div class="dashboard">
+  <div class="sidebar">
+    <div class="logo">
+        <h2>Her<span class="amp">&</span>Him Bank</h2>
+    </div>
+    <ul>
+      <li routerLink="/dashboard" routerLinkActive="active">
+        <lucide-icon [img]="Home" size="18"></lucide-icon> Dashboard
+      </li>
+      <li routerLink="/accounts" routerLinkActive="active">
+        <lucide-icon [img]="Wallet" size="18"></lucide-icon> Accounts
+      </li>
+      <li routerLink="/transfer" routerLinkActive="active">
+        <lucide-icon [img]="ArrowLeftRight" size="18"></lucide-icon> Transfer
+      </li>
+      <li routerLink="/transactions" routerLinkActive="active">
+        <lucide-icon [img]="LayoutList" size="18"></lucide-icon> Transactions
+      </li>
+      <li routerLink="/profile" routerLinkActive="active">
+        <lucide-icon [img]="User" size="18"></lucide-icon> Profile
+      </li>
+    </ul>
+    <div class="sidebar-bottom">
+      <li routerLink="/settings" routerLinkActive="active">
+        <lucide-icon [img]="Settings" size="18"></lucide-icon> Settings
+      </li>
+      <li routerLink="/login">
+        <lucide-icon [img]="LogOut" size="18"></lucide-icon> Logout
+      </li>
+    </div>
+  </div>
+
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
+</div>
