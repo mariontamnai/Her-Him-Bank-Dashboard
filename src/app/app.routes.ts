@@ -8,10 +8,12 @@ import { Profile } from './features/profile/profile';
 import { Settings } from './features/settings/settings';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
+import { ResetPassword } from './features/auth/reset-password/reset-password';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
-  { path: 'register', component: Register }, 
+  { path: 'register', component: Register },
+  { path: 'reset-password', component: ResetPassword }, 
   {
     path: '',
     component: LayoutComponent,

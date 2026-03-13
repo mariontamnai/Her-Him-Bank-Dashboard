@@ -1,12 +1,32 @@
 <div class="login-page">
+  <div class="top-nav">
+  <div class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="M9 12l2 2 4-4"/>
+      </svg>
+    </div>
+    <span class="nav-logo-text">Her&Him Bank</span>
+  </div>
+</div>
   <div class="bg-image"></div>
 
   <div class="login-center">
     <div class="login-card">
       <div class="login-logo">
-        <div class="logo-icon">H</div>
+        <div class="logo-icon">
+           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+           <path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
         <h2>Create Account</h2>
         <p>Join Her&Him Bank today</p>
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
       </div>
 
       <div class="form-group">
@@ -54,6 +74,7 @@
             <lucide-icon [img]="showPassword ? EyeOff : Eye" size="16"></lucide-icon>
           </span>
           <span class="dot-bounce password-dot" *ngIf="activeField === 'password' && password.length > 0">●</span>
+          <p class="password-hint">Min 8 chars, uppercase, lowercase, number & special character</p>
         </div>
       </div>
 

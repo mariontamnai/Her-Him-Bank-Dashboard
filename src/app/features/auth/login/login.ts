@@ -31,6 +31,24 @@ export class Login {
     this.showPassword = !this.showPassword;
   }
 
+  async forgotPassword() {
+  if (!this.email) {
+    this.errorMessage = 'Please enter your email address first!!';
+    return;
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(this.email, {
+    redirectTo: 'http://localhost:4200/reset-password'
+  });
+
+  if (error) {
+    this.errorMessage = error.message;
+  } else {
+    this.errorMessage = '';
+    alert('Password reset email sent!! Check your inbox 📧');
+  }
+}
+
   async signInWithGoogle() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
