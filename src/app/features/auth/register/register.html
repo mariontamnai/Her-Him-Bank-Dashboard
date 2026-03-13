@@ -1,0 +1,70 @@
+<div class="login-page">
+  <div class="bg-image"></div>
+
+  <div class="login-center">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-icon">H</div>
+        <h2>Create Account</h2>
+        <p>Join Her&Him Bank today</p>
+      </div>
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <div class="input-wrapper">
+          <input type="text" placeholder="Enter your full name"
+            [(ngModel)]="fullName"
+            (focus)="activeField='fullName'"
+            (blur)="activeField=''" />
+          <span class="dot-bounce" *ngIf="activeField === 'fullName' && fullName.length > 0">●</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-wrapper">
+          <input type="email" placeholder="Enter your email"
+            [(ngModel)]="email"
+            (focus)="activeField='email'"
+            (blur)="activeField=''" />
+          <span class="dot-bounce" *ngIf="activeField === 'email' && email.length > 0">●</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number</label>
+        <div class="input-wrapper">
+          <input type="tel" placeholder="+254 700 000 000"
+            [(ngModel)]="phone"
+            (focus)="activeField='phone'"
+            (blur)="activeField=''" />
+          <span class="dot-bounce" *ngIf="activeField === 'phone' && phone.length > 0">●</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrapper">
+          <input [type]="showPassword ? 'text' : 'password'"
+            placeholder="Create a password"
+            [(ngModel)]="password"
+            (focus)="activeField='password'"
+            (blur)="activeField=''" />
+          <span class="toggle-password" (click)="togglePassword()">
+            <lucide-icon [img]="showPassword ? EyeOff : Eye" size="16"></lucide-icon>
+          </span>
+          <span class="dot-bounce password-dot" *ngIf="activeField === 'password' && password.length > 0">●</span>
+        </div>
+      </div>
+
+      <button class="login-btn" (click)="register()">
+        <span *ngIf="!loading">Create Account</span>
+        <div class="bounce-dots" *ngIf="loading">
+          <span></span><span></span><span></span>
+        </div>
+      </button>
+
+      <p class="signup">Already have an account? <span routerLink="/login">Sign In</span></p>
+    </div>
+  </div>
+</div>
