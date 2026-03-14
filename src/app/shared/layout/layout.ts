@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { LucideAngularModule } from 'lucide-angular';
-import { Home, Wallet, ArrowLeftRight, LayoutList, User, Settings, LogOut } from '../icons/icons';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { LucideAngularModule, Home, Wallet, ArrowLeftRight, LayoutList, User, Settings, LogOut } from 'lucide-angular';
+import { supabase } from '../../features/auth/login/supabase';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, LucideAngularModule],
+  imports: [LucideAngularModule, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './layout.html',
   styleUrl: './layout.css'
 })
@@ -17,4 +17,11 @@ export class LayoutComponent {
   readonly User = User;
   readonly Settings = Settings;
   readonly LogOut = LogOut;
+
+  constructor(private router: Router) {}
+
+  async logout() {
+    await supabase.auth.signOut();
+    this.router.navigate(['/login']);
+  }
 }

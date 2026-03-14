@@ -171,13 +171,13 @@ body {
   background: linear-gradient(135deg, #0d3b22, #1a5c38);
 }
 
-/* BOTTOM SECTION */
+
 .bottom-section {
   display: flex;
   gap: 20px;
 }
 
-/* TRANSACTIONS */
+
 .transactions {
   flex: 2;
   background: white;

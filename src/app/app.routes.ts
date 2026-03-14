@@ -9,16 +9,18 @@ import { Settings } from './features/settings/settings';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 import { ResetPassword } from './features/auth/reset-password/reset-password';
+import { authGuard } from './core/auth-guard';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'register', component: Register },
-  { path: 'reset-password', component: ResetPassword }, 
+  { path: 'reset-password', component: ResetPassword },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }, 
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [authGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'accounts', component: Accounts },
       { path: 'transfer', component: Transfer },

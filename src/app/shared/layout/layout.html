@@ -32,7 +32,7 @@
       <li routerLink="/settings" routerLinkActive="active">
         <lucide-icon [img]="Settings" size="18"></lucide-icon> Settings
       </li>
-      <li routerLink="/login">
+      <li (click)="logout()">
         <lucide-icon [img]="LogOut" size="18"></lucide-icon> Logout
       </li>
     </div>
