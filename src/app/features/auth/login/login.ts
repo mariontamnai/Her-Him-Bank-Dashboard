@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -25,29 +25,30 @@ export class Login {
   readonly Mail = Mail;
   readonly Lock = Lock;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private cdr: ChangeDetectorRef) {}
 
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
   async forgotPassword() {
-  if (!this.email) {
-    this.errorMessage = 'Please enter your email address first!!';
-    return;
-  }
+    if (!this.email) {
+      this.errorMessage = 'Please enter your email address first!!';
+      return;
+    }
 
-  const { error } = await supabase.auth.resetPasswordForEmail(this.email, {
-    redirectTo: 'http://localhost:4200/reset-password'
-  });
+    const { error } = await supabase.auth.resetPasswordForEmail(this.email, {
+      redirectTo: 'http://localhost:4200/reset-password'
+    });
 
-  if (error) {
-    this.errorMessage = error.message;
-  } else {
-    this.errorMessage = '';
-    alert('Password reset email sent!! Check your inbox 📧');
+    if (error) {
+      this.errorMessage = error.message;
+    } else {
+      this.errorMessage = '';
+      alert('Password reset email sent!! Check your inbox 📧');
+    }
+    this.cdr.detectChanges();
   }
-}
 
   async signInWithGoogle() {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -56,7 +57,10 @@ export class Login {
         redirectTo: 'http://localhost:4200/dashboard'
       }
     });
-    if (error) this.errorMessage = error.message;
+    if (error) {
+      this.errorMessage = error.message;
+      this.cdr.detectChanges();
+    }
   }
 
   async signIn() {
@@ -90,5 +94,6 @@ export class Login {
     } else {
       this.router.navigate(['/dashboard']);
     }
+    this.cdr.detectChanges();
   }
 }
