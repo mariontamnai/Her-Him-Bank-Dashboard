@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, Eye, EyeOff, Mail, Lock, Phone, User } from 'lucide-angular';
+import { LucideAngularModule, Eye, EyeOff, Mail, Lock, Phone, User, Currency } from 'lucide-angular';
 import { supabase } from '../login/supabase';
 
 
@@ -17,6 +17,7 @@ export class Register {
   fullName = '';
   email = '';
   phone = '';
+  currency = '';
   password = '';
   showPassword = false;
   loading = false;
@@ -39,7 +40,7 @@ export class Register {
   async register() {
   this.errorMessage = '';
 
-  if (!this.fullName || !this.email || !this.phone || !this.password) {
+  if (!this.fullName || !this.email || !this.phone || !this.password || !this.currency) {
   this.errorMessage = 'Please fill in all fields!!';
   return;
 }
@@ -86,6 +87,29 @@ if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(this.password)) {
   if (error) {
     this.errorMessage = error.message;
   } else {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      console.log('creating accounts for user:', user.id);
+      const { error: accountError } =await supabase.from('Accounts').insert([
+        {
+          user_id: user.id,
+          account_type: 'Current',
+          account_number: Math.floor(1000 + Math.random() * 9000).toString(),
+          balance: 0,
+          currency: this.currency,
+          is_active: true
+        },
+        {
+          user_id: user.id,
+          account_type: 'Savings',
+          account_number: Math.floor(1000 + Math.random() * 9000).toString(),
+          balance: 0,
+          currency: this.currency,
+          is_active: true
+        }
+      ]);
+      console.log('account creation error:', accountError);
+    }
     this.router.navigate(['/dashboard']);
   }
 }
