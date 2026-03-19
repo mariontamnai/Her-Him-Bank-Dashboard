@@ -15,7 +15,7 @@ body {
   min-height: 100vh;
 }
 
-/* SIDEBAR */
+
 .sidebar {
   width: 250px;
   background-color: #1a5c38;
@@ -113,7 +113,6 @@ body {
 
 .sidebar-bottom {
   list-style: none;
-  border-top: 1px solid rgba(255,255,255,0.2);
   padding-top: 20px;
 }
 
@@ -130,14 +129,15 @@ body {
   background-color: rgba(255,255,255,0.15);
 }
 
-/* MAIN */
+
 .main {
   flex: 1;
   margin-left: 250px;
-  padding: 30px;
+  padding: 0;
+  background: #f5f6fa;
 }
 
-/* TOPBAR */
+
 .topbar {
   display: flex;
   justify-content: space-between;

@@ -1,36 +1,81 @@
-<div class="dashboard-content">
-  <div class="topbar">
-    <div>
-      <h1>{{ greeting }}, {{ userName }}</h1>
-      <p>{{ today }}</p>
-    </div>
-    <div class="avatar">{{ userInitials }}</div>
-  </div>
+<div class="db-wrapper">
 
-  <div class="cards">
-    <div class="card primary">
-      <p>Current Account</p>
-      <h2>KES 124,500.00</h2>
-      <span>**** **** **** 4521</span>
+  
+  <div class="db-navbar">
+    <div class="db-search">
+      <lucide-icon [img]="Search" size="16" class="search-icon"></lucide-icon>
+      <input type="text" placeholder="Search transactions, accounts..." />
     </div>
-    <div class="card secondary">
-      <p>Savings Account</p>
-      <h2>KES 87,200.00</h2>
-      <span>**** **** **** 7893</span>
-    </div>
-    <div class="card accent">
-      <p>Total Balance</p>
-      <h2>KES 211,700.00</h2>
-      <span>All accounts combined</span>
+    <div class="db-nav-right">
+      <div class="notif-btn">
+        <lucide-icon [img]="Bell" size="20"></lucide-icon>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="nav-avatar">{{ userInitials }}</div>
     </div>
   </div>
 
-  <div class="bottom-section">
-    <div class="transactions">
-      <h3>Recent Transactions</h3>
-      <ul>
+  
+  <div class="db-greeting">
+    <h1>{{ greeting }}, {{ userName }} 👋</h1>
+    <p>{{ today }}</p>
+  </div>
+
+  
+  <div class="hero-card">
+    <div class="hero-left">
+      <p class="hero-label">Total Balance</p>
+      <h2 class="hero-amount" *ngIf="!hideBalance">KES 211,700.00</h2>
+      <h2 class="hero-amount" *ngIf="hideBalance">KES ••••••••</h2>
+      <p class="hero-account">Savings **** 4582 &nbsp;|&nbsp; Current **** 4521</p>
+    </div>
+    <div class="hero-right">
+      <button class="hide-btn" (click)="toggleBalance()">
+        <lucide-icon [img]="hideBalance ? EyeOff : Eye" size="16"></lucide-icon>
+        {{ hideBalance ? 'Show' : 'Hide' }} Balance
+      </button>
+    </div>
+  </div>
+
+  <div class="section-title">Quick Actions</div>
+  <div class="quick-grid">
+    <button class="q-btn">
+      <div class="q-icon"><lucide-icon [img]="Send" size="20"></lucide-icon></div>
+      <span>Send Money</span>
+    </button>
+    <button class="q-btn">
+      <div class="q-icon"><lucide-icon [img]="Phone" size="20"></lucide-icon></div>
+      <span>Buy Airtime</span>
+    </button>
+    <button class="q-btn">
+      <div class="q-icon"><lucide-icon [img]="Smartphone" size="20"></lucide-icon></div>
+      <span>M-Pesa</span>
+    </button>
+    <button class="q-btn">
+      <div class="q-icon"><lucide-icon [img]="Download" size="20"></lucide-icon></div>
+      <span>Deposit</span>
+    </button>
+    <button class="q-btn">
+      <div class="q-icon"><lucide-icon [img]="FileText" size="20"></lucide-icon></div>
+      <span>Pay Bills</span>
+    </button>
+    <button class="q-btn">
+      <div class="q-icon"><lucide-icon [img]="ArrowLeftRight" size="20"></lucide-icon></div>
+      <span>Transfer</span>
+    </button>
+  </div>
+
+  <div class="db-two-col">
+
+    
+    <div class="db-card">
+      <div class="card-header">
+        <h3>Recent Transactions</h3>
+        <span class="see-all">See all</span>
+      </div>
+      <ul class="t-list">
         <li>
-          <div class="t-info">
+          <div class="t-left">
             <div class="t-icon">🛒</div>
             <div>
               <p>Supermarket</p>
@@ -40,7 +85,7 @@
           <span class="debit">- KES 3,200</span>
         </li>
         <li>
-          <div class="t-info">
+          <div class="t-left">
             <div class="t-icon">💼</div>
             <div>
               <p>Salary</p>
@@ -50,17 +95,17 @@
           <span class="credit">+ KES 85,000</span>
         </li>
         <li>
-          <div class="t-info">
+          <div class="t-left">
             <div class="t-icon">📱</div>
             <div>
-              <p>Airtime</p>
+              <p>Safaricom Airtime</p>
               <small>28 Feb, 3:00 PM</small>
             </div>
           </div>
           <span class="debit">- KES 500</span>
         </li>
         <li>
-          <div class="t-info">
+          <div class="t-left">
             <div class="t-icon">🏠</div>
             <div>
               <p>Rent</p>
@@ -69,29 +114,62 @@
           </div>
           <span class="debit">- KES 25,000</span>
         </li>
+        <li>
+          <div class="t-left">
+            <div class="t-icon">🚗</div>
+            <div>
+              <p>Uber Ride</p>
+              <small>26 Feb, 6:00 PM</small>
+            </div>
+          </div>
+          <span class="debit">- KES 650</span>
+        </li>
       </ul>
     </div>
 
-    <div class="quick-actions">
-      <h3>Quick Actions</h3>
-      <div class="actions-grid">
-        <button>
-          <lucide-icon [img]="Send" size="18"></lucide-icon>
-          <span>Send Money</span>
-        </button>
-        <button>
-          <lucide-icon [img]="Download" size="18"></lucide-icon>
-          <span>Deposit</span>
-        </button>
-        <button>
-          <lucide-icon [img]="FileText" size="18"></lucide-icon>
-          <span>Statement</span>
-        </button>
-        <button>
-          <lucide-icon [img]="Phone" size="18"></lucide-icon>
-          <span>Support</span>
-        </button>
+    <div class="db-right-col">
+
+      
+      <div class="virtual-card">
+        <div class="vc-top">
+          <span class="vc-label">Visa Debit Card</span>
+          <span class="vc-badge">Active</span>
+        </div>
+        <p class="vc-number">**** **** **** 4582</p>
+        <div class="vc-bottom">
+          <span>Expiry 10/27</span>
+          <div class="vc-actions">
+            <button>Freeze</button>
+            <button>Details</button>
+          </div>
+        </div>
       </div>
+
+      
+      <div class="db-card">
+        <div class="card-header">
+          <h3>Bills & Services</h3>
+        </div>
+        <div class="bills-grid">
+          <button class="bill-btn">⚡ KPLC</button>
+          <button class="bill-btn">📺 DSTV</button>
+          <button class="bill-btn">🌐 Internet</button>
+          <button class="bill-btn">💧 Water</button>
+          <button class="bill-btn">🏫 School</button>
+          <button class="bill-btn">➕ More</button>
+        </div>
+      </div>
+
+      
+      <div class="loan-card">
+        <div class="loan-left">
+          <p class="loan-label">Loan Offer 🎉</p>
+          <h4>You qualify for</h4>
+          <p class="loan-amount">KES 50,000</p>
+        </div>
+        <button class="loan-btn">Apply Now</button>
+      </div>
+
     </div>
   </div>
 </div>
