@@ -1,12 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule, Eye, EyeOff, Bell, Search, Smartphone } from 'lucide-angular';
 import { Home, Wallet, ArrowLeftRight, LayoutList, User, Settings, LogOut, Send, Download, FileText, Phone } from '../../shared/icons/icons';
 import { supabase } from '../auth/login/supabase';
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true,
   imports: [LucideAngularModule, RouterLink, CommonModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
@@ -23,6 +24,13 @@ export class DashboardComponent implements OnInit {
   readonly Download = Download;
   readonly FileText = FileText;
   readonly Phone = Phone;
+  readonly Eye = Eye;
+  readonly EyeOff = EyeOff;
+  readonly Bell = Bell;
+  readonly Search = Search;
+  readonly Smartphone = Smartphone;
+
+  hideBalance = false;
 
   userName = '';
   userInitials = '';
@@ -30,6 +38,10 @@ export class DashboardComponent implements OnInit {
   today = '';
 
   constructor(private cdr: ChangeDetectorRef) {}
+
+  toggleBalance() {
+  this.hideBalance = !this.hideBalance;
+}
 
   async ngOnInit() {
     console.log('ngOnInit called!!');
