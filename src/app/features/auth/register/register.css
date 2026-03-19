@@ -109,6 +109,19 @@
   margin-bottom: 8px;
 }
 
+.currency-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  background: white;
+  color: #333;
+  cursor: pointer;
+}
+
+.currency-select:focus { border-color: #1a5c38; }
 .input-wrapper { position: relative; }
 
 .input-wrapper input {
