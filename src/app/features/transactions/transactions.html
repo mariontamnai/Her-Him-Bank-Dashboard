@@ -1,17 +1,28 @@
 <div class="transactions-content">
-  <div class="topbar">
-    <div>
-      <h1>Transactions</h1>
-      <p>Your recent transaction history</p>
+  <div class="db-navbar">
+    <div class="db-search">
+      <lucide-icon [img]="Search" size="16" class="search-icon"></lucide-icon>
+      <input type="text" placeholder="Search transactions..." [(ngModel)]="searchQuery" (input)="onSearch()" />
     </div>
-    <div class="avatar">JD</div>
+    <div class="db-nav-right">
+      <div class="notif-btn">
+        <lucide-icon [img]="Bell" size="20"></lucide-icon>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="nav-avatar">{{ userInitials }}</div>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <h1>Transactions</h1>
+    <p>Your recent transaction history</p>
   </div>
 
   <div class="filter-bar">
-    <button class="filter-btn active">All</button>
-    <button class="filter-btn">Credit</button>
-    <button class="filter-btn">Debit</button>
-    <button class="filter-btn">This Month</button>
+    <button class="filter-btn" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">All</button>
+    <button class="filter-btn" [class.active]="activeFilter === 'credit'" (click)="setFilter('credit')">Credit</button>
+    <button class="filter-btn" [class.active]="activeFilter === 'debit'" (click)="setFilter('debit')">Debit</button>
+    <button class="filter-btn" [class.active]="activeFilter === 'month'" (click)="setFilter('month')">This Month</button>
   </div>
 
   <div class="transactions-table">
@@ -21,77 +32,26 @@
       <span>Type</span>
       <span>Amount</span>
     </div>
-    <div class="table-row">
-      <div class="t-info">
-        <div class="t-icon">🛒</div>
-        <div>
-          <p>Supermarket</p>
-          <small>Naivas Supermarket</small>
-        </div>
-      </div>
-      <span>Today, 9:00 AM</span>
-      <span class="type debit-type">Debit</span>
-      <span class="debit">- KES 3,200</span>
+
+    <div *ngIf="filteredTransactions.length === 0" class="no-transactions">
+      <p>No transactions found!!</p>
     </div>
-    <div class="table-row">
+
+    <div class="table-row" *ngFor="let transaction of filteredTransactions">
       <div class="t-info">
-        <div class="t-icon">💼</div>
+        
         <div>
-          <p>Salary</p>
-          <small>Employer Payment</small>
+          <p>{{ transaction.recipient_name }}</p>
+          <small>{{ transaction.reason || 'Transfer' }}</small>
         </div>
       </div>
-      <span>1 Mar, 8:00 AM</span>
-      <span class="type credit-type">Credit</span>
-      <span class="credit">+ KES 85,000</span>
-    </div>
-    <div class="table-row">
-      <div class="t-info">
-        <div class="t-icon">📱</div>
-        <div>
-          <p>Airtime</p>
-          <small>Safaricom</small>
-        </div>
-      </div>
-      <span>28 Feb, 3:00 PM</span>
-      <span class="type debit-type">Debit</span>
-      <span class="debit">- KES 500</span>
-    </div>
-    <div class="table-row">
-      <div class="t-info">
-        <div class="t-icon">🏠</div>
-        <div>
-          <p>Rent</p>
-          <small>Landlord Payment</small>
-        </div>
-      </div>
-      <span>27 Feb, 10:00 AM</span>
-      <span class="type debit-type">Debit</span>
-      <span class="debit">- KES 25,000</span>
-    </div>
-    <div class="table-row">
-      <div class="t-info">
-        <div class="t-icon">🍔</div>
-        <div>
-          <p>Restaurant</p>
-          <small>Java House</small>
-        </div>
-      </div>
-      <span>26 Feb, 1:00 PM</span>
-      <span class="type debit-type">Debit</span>
-      <span class="debit">- KES 1,800</span>
-    </div>
-    <div class="table-row">
-      <div class="t-info">
-        <div class="t-icon">💰</div>
-        <div>
-          <p>Transfer In</p>
-          <small>From John Kamau</small>
-        </div>
-      </div>
-      <span>25 Feb, 11:00 AM</span>
-      <span class="type credit-type">Credit</span>
-      <span class="credit">+ KES 5,000</span>
+      <span>{{ transaction.created_at | date:'d MMM, h:mm a' }}</span>
+      <span class="type" [class.debit-type]="transaction.type === 'debit'" [class.credit-type]="transaction.type === 'credit'">
+        {{ transaction.type | titlecase }}
+      </span>
+      <span [class.debit]="transaction.type === 'debit'" [class.credit]="transaction.type === 'credit'">
+        {{ transaction.type === 'debit' ? '-' : '+' }} {{ transaction.currency }} {{ transaction.amount | number:'1.2-2' }}
+      </span>
     </div>
   </div>
 </div>
