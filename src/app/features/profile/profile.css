@@ -1,5 +1,5 @@
 .profile-content {
-  padding: 30px;
+  padding: 0;
 }
 
 .topbar {
@@ -126,4 +126,75 @@
   font-size: 14px;
   font-weight: 600;
   color: #333;
+}
+
+.db-navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 16px 30px;
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+
+.db-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.notif-btn {
+  position: relative;
+  cursor: pointer;
+  color: #555;
+}
+
+.notif-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: #e74c3c;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.nav-avatar {
+  width: 38px;
+  height: 38px;
+  background: #1a5c38;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.page-header {
+  padding: 24px 30px 0;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a5c38;
+}
+
+.page-header p {
+  font-size: 13px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.profile-layout {
+  padding: 0 30px 30px;
 }

@@ -1,19 +1,26 @@
 <div class="profile-content">
-  <div class="topbar">
-    <div>
-      <h1>My Profile</h1>
-      <p>Manage your personal information</p>
+  <div class="db-navbar">
+    <div class="db-nav-right">
+      <div class="notif-btn">
+        <lucide-icon [img]="Bell" size="20"></lucide-icon>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="nav-avatar">{{ userInitials }}</div>
     </div>
-    <div class="avatar">JD</div>
+  </div>
+
+  <div class="page-header">
+    <h1>My Profile</h1>
+    <p>Manage your personal information</p>
   </div>
 
   <div class="profile-layout">
     <div class="profile-card">
       <div class="profile-header">
-        <div class="profile-avatar">JD</div>
+        <div class="profile-avatar">{{ userInitials }}</div>
         <div>
-          <h2>John Doe</h2>
-          <p>Premium Account Holder</p>
+          <h2>{{ fullName }}</h2>
+          <p>Her&Him Bank Member</p>
           <span class="badge">Verified ✓</span>
         </div>
       </div>
@@ -24,23 +31,15 @@
         <h3>Personal Information</h3>
         <div class="detail-item">
           <small>Full Name</small>
-          <p>John Doe</p>
+          <p>{{ fullName }}</p>
         </div>
         <div class="detail-item">
           <small>Email Address</small>
-          <p>johndoe&#64;email.com</p>
+          <p>{{ email }}</p>
         </div>
         <div class="detail-item">
           <small>Phone Number</small>
-          <p>+254 700 000 000</p>
-        </div>
-        <div class="detail-item">
-          <small>Date of Birth</small>
-          <p>1 January 1990</p>
-        </div>
-        <div class="detail-item">
-          <small>National ID</small>
-          <p>**** **** 1234</p>
+          <p>{{ phone }}</p>
         </div>
       </div>
 
@@ -48,19 +47,15 @@
         <h3>Account Information</h3>
         <div class="detail-item">
           <small>Customer ID</small>
-          <p>IM-2024-00123</p>
-        </div>
-        <div class="detail-item">
-          <small>Account Type</small>
-          <p>Premium</p>
+          <p>{{ userId }}</p>
         </div>
         <div class="detail-item">
           <small>Member Since</small>
-          <p>March 2020</p>
+          <p>{{ memberSince }}</p>
         </div>
         <div class="detail-item">
-          <small>Branch</small>
-          <p>Nairobi CBD</p>
+          <small>Account Status</small>
+          <p>Active ✅</p>
         </div>
       </div>
     </div>
