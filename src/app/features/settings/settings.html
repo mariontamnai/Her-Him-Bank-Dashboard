@@ -1,54 +1,110 @@
 <div class="settings-content">
-  <div class="topbar">
-    <div>
-      <h1>Settings</h1>
-      <p>Manage your account preferences</p>
+  <div class="db-navbar">
+    <div class="db-nav-right">
+      <div class="notif-btn">
+        <lucide-icon [img]="Bell" size="20"></lucide-icon>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="nav-avatar">{{ userInitials }}</div>
     </div>
-    <div class="avatar">JD</div>
   </div>
 
+  <div class="page-header">
+    <h1>Settings</h1>
+    <p>Manage your account preferences</p>
+  </div>
+
+  <div class="success-msg" *ngIf="successMessage">
+   {{ successMessage }}
+</div>
+
   <div class="settings-sections">
+
     <div class="settings-card">
-      <h3>Profile Settings</h3>
-      <div class="settings-item">
-        <div class="settings-info">
-          <p>Full Name</p>
-          <small>John Doe</small>
-        </div>
-        <button class="edit-btn">Edit</button>
+  <h3>Profile Settings</h3>
+  
+  <div class="settings-item">
+    <div class="settings-info">
+      <p>Full Name</p>
+      <div *ngIf="!editingName">
+        <small>{{ fullName }}</small>
       </div>
-      <div class="settings-item">
-        <div class="settings-info">
-          <p>Email Address</p>
-          <small>johndoe&#64;email.com</small>
-        </div>
-        <button class="edit-btn">Edit</button>
-      </div>
-      <div class="settings-item">
-        <div class="settings-info">
-          <p>Phone Number</p>
-          <small>+254 700 000 000</small>
-        </div>
-        <button class="edit-btn">Edit</button>
+      <div *ngIf="editingName" class="inline-edit">
+        <input type="text" [(ngModel)]="editName" name="editName" title="Full Name" placeholder="Enter full name" />
+        <button class="save-btn" (click)="saveName()">Save</button>
+        <button class="cancel-btn" (click)="editingName = false">Cancel</button>
       </div>
     </div>
+    <button class="edit-btn" *ngIf="!editingName" (click)="editingName = true">Edit</button>
+  </div>
+
+  <div class="settings-item">
+    <div class="settings-info">
+      <p>Email Address</p>
+      <div *ngIf="!editingEmail">
+        <small>{{ email }}</small>
+      </div>
+      <div *ngIf="editingEmail" class="inline-edit">
+        <input type="email" [(ngModel)]="editEmail" name="editEmail" title="Email Address" placeholder="Enter email address" />
+        <button class="save-btn" (click)="saveEmail()">Save</button>
+        <button class="cancel-btn" (click)="editingEmail = false">Cancel</button>
+      </div>
+    </div>
+    <button class="edit-btn" *ngIf="!editingEmail" (click)="editingEmail = true">Edit</button>
+  </div>
+
+  <div class="settings-item">
+    <div class="settings-info">
+      <p>Phone Number</p>
+      <div *ngIf="!editingPhone">
+        <small>{{ phone }}</small>
+      </div>
+      <div *ngIf="editingPhone" class="inline-edit">
+        <input type="tel" [(ngModel)]="editPhone" name="editPhone" title="Phone Number" placeholder="Enter phone number" />
+        <button class="save-btn" (click)="savePhone()">Save</button>
+        <button class="cancel-btn" (click)="editingPhone = false">Cancel</button>
+      </div>
+    </div>
+    <button class="edit-btn" *ngIf="!editingPhone" (click)="editingPhone = true">Edit</button>
+  </div>
+</div>
 
     <div class="settings-card">
       <h3>Security</h3>
       <div class="settings-item">
         <div class="settings-info">
           <p>Change Password</p>
-          <small>Last changed 3 months ago</small>
+          <small>Update your account password</small>
         </div>
-        <button class="edit-btn">Change</button>
+        <button class="edit-btn" (click)="changePassword()">Change</button>
       </div>
       <div class="settings-item">
-        <div class="settings-info">
-          <p>Two Factor Authentication</p>
-          <small>Enabled</small>
-        </div>
-        <button class="edit-btn">Manage</button>
-      </div>
+  <div class="settings-info">
+    <p>Two Factor Authentication</p>
+    <small>{{ mfaEnabled ? 'Enabled ' : 'Disabled' }}</small>
+  </div>
+  <button class="edit-btn" (click)="enableTwoFA()">{{ mfaEnabled ? 'Manage' : 'Enable' }}</button>
+</div>
+
+<div class="qr-section" *ngIf="showQR">
+  <p class="qr-instructions">Scan this QR code with any authenticator app — <strong>Google Authenticator</strong>, <strong>Authy</strong>, <strong>Microsoft Authenticator</strong> or <strong>Apple's built-in Passwords app</strong> (iOS 15+)!!</p>
+  <img [src]="qrCode" alt="QR Code" class="qr-code" />
+  <div class="qr-verify">
+    <input type="text" [(ngModel)]="verifyCode" name="verifyCode" placeholder="Enter 6-digit code" title="Verification Code" maxlength="6" />
+    <button class="save-btn" (click)="verifyTwoFA()">Verify</button>
+  </div>
+</div>
+      <div class="settings-item">
+  <div class="settings-info">
+    <p>Biometric Login</p>
+    <small *ngIf="!biometricSupported">Not supported on this device</small>
+    <small *ngIf="biometricSupported && !biometricRegistered">Use fingerprint or Face ID to login</small>
+    <small *ngIf="biometricRegistered">Enabled </small>
+  </div>
+  <button class="edit-btn" *ngIf="biometricSupported && !biometricRegistered" (click)="enableBiometric()">Enable</button>
+  <button class="edit-btn" *ngIf="biometricRegistered" (click)="disableBiometric()">Disable</button>
+  <small *ngIf="!biometricSupported" class="not-supported">Not available</small>
+</div>
     </div>
 
     <div class="settings-card">
@@ -59,7 +115,7 @@
           <small>Receive transaction alerts via email</small>
         </div>
         <label class="toggle">
-          <input type="checkbox" checked aria-label="Email Notifications">
+          <input type="checkbox" [(ngModel)]="emailNotifications" aria-label="Email Notifications">
           <span class="slider"></span>
         </label>
       </div>
@@ -69,10 +125,50 @@
           <small>Receive transaction alerts via SMS</small>
         </div>
         <label class="toggle">
-          <input type="checkbox" checked aria-label="SMS Notifications">
+          <input type="checkbox" [(ngModel)]="smsNotifications" aria-label="SMS Notifications">
           <span class="slider"></span>
         </label>
       </div>
-    </div>
+      <div class="settings-item">
+  <div class="settings-info">
+    <p>Push Notifications</p>
+    <small>Receive push notifications on your device</small>
   </div>
+  <label class="toggle">
+    <input type="checkbox" [(ngModel)]="pushNotifications" (change)="enablePushNotifications()" aria-label="Push Notifications">
+    <span class="slider"></span>
+  </label>
 </div>
+    </div>
+
+    <div class="settings-card">
+      <h3>Preferences</h3>
+      <div class="settings-item">
+        <div class="settings-info">
+          <p>Language</p>
+          <small>Choose your preferred language</small>
+        </div>
+        <select [(ngModel)]="language" title="Language" class="pref-select">
+          <option value="english">🇬🇧 English</option>
+          <option value="swahili">🇰🇪 Swahili</option>
+          <option value="french">🇫🇷 French</option>
+          <option value="arabic">🇸🇦 Arabic</option>
+        </select>
+      </div>
+      <div class="settings-item">
+        <div class="settings-info">
+          <p>Default Currency Display</p>
+          <small>Choose your preferred currency</small>
+        </div>
+        <select [(ngModel)]="currency" title="Currency" class="pref-select">
+          <option value="KES">🇰🇪 KES</option>
+          <option value="USD">🇺🇸 USD</option>
+          <option value="GBP">🇬🇧 GBP</option>
+          <option value="EUR">🇪🇺 EUR</option>
+          <option value="UGX">🇺🇬 UGX</option>
+          <option value="TZS">🇹🇿 TZS</option>
+        </select>
+      </div>
+    </div>
+
+  </div>
