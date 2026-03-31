@@ -1,6 +1,5 @@
 <div class="db-wrapper">
 
-  
   <div class="db-navbar">
     <div class="db-search">
       <lucide-icon [img]="Search" size="16" class="search-icon"></lucide-icon>
@@ -15,19 +14,17 @@
     </div>
   </div>
 
-  
   <div class="db-greeting">
     <h1>{{ greeting }}, {{ userName }} 👋</h1>
     <p>{{ today }}</p>
   </div>
 
-  
   <div class="hero-card">
     <div class="hero-left">
       <p class="hero-label">Total Balance</p>
-      <h2 class="hero-amount" *ngIf="!hideBalance">KES 211,700.00</h2>
-      <h2 class="hero-amount" *ngIf="hideBalance">KES ••••••••</h2>
-      <p class="hero-account">Savings **** 4582 &nbsp;|&nbsp; Current **** 4521</p>
+      <h2 class="hero-amount" *ngIf="!hideBalance">{{ currencyService.format(totalBalance) }}</h2>
+      <h2 class="hero-amount" *ngIf="hideBalance">{{ currencyService.symbol }} ••••••••</h2>
+      <p class="hero-account">All Accounts Combined</p>
     </div>
     <div class="hero-right">
       <button class="hide-btn" (click)="toggleBalance()">
@@ -39,27 +36,27 @@
 
   <div class="section-title">Quick Actions</div>
   <div class="quick-grid">
-    <button class="q-btn">
+    <button class="q-btn" (click)="navigateTo('/transfer')">
       <div class="q-icon"><lucide-icon [img]="Send" size="20"></lucide-icon></div>
       <span>Send Money</span>
     </button>
-    <button class="q-btn">
+    <button class="q-btn" (click)="navigateTo('/transfer')">
       <div class="q-icon"><lucide-icon [img]="Phone" size="20"></lucide-icon></div>
       <span>Buy Airtime</span>
     </button>
-    <button class="q-btn">
+    <button class="q-btn" (click)="navigateTo('/transfer')">
       <div class="q-icon"><lucide-icon [img]="Smartphone" size="20"></lucide-icon></div>
       <span>M-Pesa</span>
     </button>
-    <button class="q-btn">
+    <button class="q-btn" (click)="navigateTo('/accounts')">
       <div class="q-icon"><lucide-icon [img]="Download" size="20"></lucide-icon></div>
       <span>Deposit</span>
     </button>
-    <button class="q-btn">
+    <button class="q-btn" (click)="navigateTo('/transfer')">
       <div class="q-icon"><lucide-icon [img]="FileText" size="20"></lucide-icon></div>
       <span>Pay Bills</span>
     </button>
-    <button class="q-btn">
+    <button class="q-btn" (click)="navigateTo('/transfer')">
       <div class="q-icon"><lucide-icon [img]="ArrowLeftRight" size="20"></lucide-icon></div>
       <span>Transfer</span>
     </button>
@@ -67,69 +64,30 @@
 
   <div class="db-two-col">
 
-    
     <div class="db-card">
       <div class="card-header">
         <h3>Recent Transactions</h3>
-        <span class="see-all">See all</span>
+        <span class="see-all" (click)="navigateTo('/transactions')" style="cursor:pointer;">See all</span>
       </div>
-      <ul class="t-list">
-        <li>
+      <ul class="t-list" *ngIf="recentTransactions.length > 0">
+        <li *ngFor="let t of recentTransactions">
           <div class="t-left">
-            <div class="t-icon">🛒</div>
+            <div class="t-icon">{{ t.type === 'debit' ? '💸' : '💰' }}</div>
             <div>
-              <p>Supermarket</p>
-              <small>Today, 9:00 AM</small>
+              <p>{{ t.recipient_name }}</p>
+              <small>{{ t.created_at | date:'d MMM, h:mm a' }}</small>
             </div>
           </div>
-          <span class="debit">- KES 3,200</span>
-        </li>
-        <li>
-          <div class="t-left">
-            <div class="t-icon">💼</div>
-            <div>
-              <p>Salary</p>
-              <small>1 Mar, 8:00 AM</small>
-            </div>
-          </div>
-          <span class="credit">+ KES 85,000</span>
-        </li>
-        <li>
-          <div class="t-left">
-            <div class="t-icon">📱</div>
-            <div>
-              <p>Safaricom Airtime</p>
-              <small>28 Feb, 3:00 PM</small>
-            </div>
-          </div>
-          <span class="debit">- KES 500</span>
-        </li>
-        <li>
-          <div class="t-left">
-            <div class="t-icon">🏠</div>
-            <div>
-              <p>Rent</p>
-              <small>27 Feb, 10:00 AM</small>
-            </div>
-          </div>
-          <span class="debit">- KES 25,000</span>
-        </li>
-        <li>
-          <div class="t-left">
-            <div class="t-icon">🚗</div>
-            <div>
-              <p>Uber Ride</p>
-              <small>26 Feb, 6:00 PM</small>
-            </div>
-          </div>
-          <span class="debit">- KES 650</span>
+          <span [class]="t.type === 'debit' ? 'debit' : 'credit'">
+            {{ t.type === 'debit' ? '-' : '+' }} {{ currencyService.format(t.amount) }}
+          </span>
         </li>
       </ul>
+      <p *ngIf="recentTransactions.length === 0" style="color:#6b7280;text-align:center;padding:20px;">No transactions yet!</p>
     </div>
 
     <div class="db-right-col">
 
-      
       <div class="virtual-card">
         <div class="vc-top">
           <span class="vc-label">Visa Debit Card</span>
@@ -145,27 +103,25 @@
         </div>
       </div>
 
-      
       <div class="db-card">
         <div class="card-header">
           <h3>Bills & Services</h3>
         </div>
         <div class="bills-grid">
-          <button class="bill-btn">⚡ KPLC</button>
-          <button class="bill-btn">📺 DSTV</button>
-          <button class="bill-btn">🌐 Internet</button>
-          <button class="bill-btn">💧 Water</button>
-          <button class="bill-btn">🏫 School</button>
-          <button class="bill-btn">➕ More</button>
+          <button class="bill-btn" (click)="navigateTo('/transfer')">⚡ KPLC</button>
+          <button class="bill-btn" (click)="navigateTo('/transfer')">📺 DSTV</button>
+          <button class="bill-btn" (click)="navigateTo('/transfer')">🌐 Internet</button>
+          <button class="bill-btn" (click)="navigateTo('/transfer')">💧 Water</button>
+          <button class="bill-btn" (click)="navigateTo('/transfer')">🏫 School</button>
+          <button class="bill-btn" (click)="navigateTo('/transfer')">➕ More</button>
         </div>
       </div>
 
-      
       <div class="loan-card">
         <div class="loan-left">
           <p class="loan-label">Loan Offer 🎉</p>
           <h4>You qualify for</h4>
-          <p class="loan-amount">KES 50,000</p>
+          <p class="loan-amount">{{ currencyService.format(50000) }}</p>
         </div>
         <button class="loan-btn">Apply Now</button>
       </div>

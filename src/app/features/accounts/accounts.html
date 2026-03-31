@@ -27,7 +27,7 @@
       <p>{{ account.account_type }} Account</p>
       <span class="badge">{{ account.is_active ? 'Active' : 'Inactive' }}</span>
     </div>
-    <h2>{{ account.currency }} {{ account.balance | number:'1.2-2' }}</h2>
+    <h2>{{ currencyService.format(account.balance) }}</h2>
     <div class="account-details">
       <div>
         <small>Account Number</small>
@@ -49,7 +49,7 @@
 <div class="total-section">
   <div class="total-card">
     <p>Total Balance Across All Accounts</p>
-    <h2>{{ accounts[0]?.currency }} {{ totalBalance | number:'1.2-2' }}</h2>
+    <h2>{{ currencyService.format(totalBalance) }}</h2>
   </div>
 </div>
 </div>

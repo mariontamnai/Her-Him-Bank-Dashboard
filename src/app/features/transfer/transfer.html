@@ -23,105 +23,106 @@
       <h3>New Transfer</h3>
 
       <div class="transfer-tabs">
-       <button class="tab-btn" [class.active]="transferType === 'bank'" (click)="transferType = 'bank'"> Bank Account</button>
-       <button class="tab-btn" [class.active]="transferType === 'mpesa'" (click)="transferType = 'mpesa'"> M-Pesa /Mobile Money</button>
-       <button class="tab-btn" [class.active]="transferType === 'own'" (click)="transferType = 'own'"> My Accounts</button>
-    </div>
+        <button class="tab-btn" [class.active]="transferType === 'bank'" (click)="transferType = 'bank'">Bank Account</button>
+        <button class="tab-btn" [class.active]="transferType === 'mpesa'" (click)="transferType = 'mpesa'">M-Pesa /Mobile Money</button>
+        <button class="tab-btn" [class.active]="transferType === 'own'" (click)="transferType = 'own'">My Accounts</button>
+      </div>
 
       <div class="success-message" *ngIf="successMessage">
-         {{ successMessage }}
+        {{ successMessage }}
       </div>
 
       <div class="error-message" *ngIf="errorMessage">
-         {{ errorMessage }}
+        {{ errorMessage }}
       </div>
 
       <div *ngIf="transferType === 'bank' || transferType === 'mpesa'">
-  <div class="form-group">
-    <label>From Account</label>
-    <select [(ngModel)]="selectedAccount" name="selectedAccount" title="From Account">
-      <option *ngFor="let account of accounts" [value]="account.id">
-        {{ account.account_type }} Account - **** {{ account.account_number }} ({{ account.currency }} {{ account.balance | number:'1.2-2' }})
-      </option>
-    </select>
-  </div>
+        <div class="form-group">
+          <label>From Account</label>
+          <select [(ngModel)]="selectedAccount" name="selectedAccount" title="From Account">
+            <option *ngFor="let account of accounts" [value]="account.id">
+              {{ account.account_type }} Account - **** {{ account.account_number }} 
+            </option>
+          </select>
+        </div>
 
-  <div class="form-group" *ngIf="transferType === 'bank'">
-    <label>Recipient Account Number</label>
-    <input type="text" placeholder="Enter account number" [(ngModel)]="recipientAccount" name="recipientAccount" />
-  </div>
+        <div class="form-group" *ngIf="transferType === 'bank'">
+          <label>Recipient Account Number</label>
+          <input type="text" placeholder="Enter account number" [(ngModel)]="recipientAccount" name="recipientAccount" />
+        </div>
 
-  <div class="form-group" *ngIf="transferType === 'mpesa'">
-  <label>M-Pesa / Mobile Money Number</label>
-  <div class="phone-input-wrapper">
-    <select [(ngModel)]="countryCode" name="countryCode" title="Country Code" class="country-code-select">
-      <option value="+254">🇰🇪 +254 </option>
-      <option value="+255">🇹🇿 +255 </option>
-      <option value="+256">🇺🇬 +256 </option>
-      <option value="+233">🇬🇭 +233 </option>
-      <option value="+234">🇳🇬 +234 </option>
-      <option value="+250">🇷🇼 +250 </option>
-      <option value="+260">🇿🇲 +260 </option>
-      <option value="+265">🇲🇼 +265 </option>
-      <option value="+258">🇲🇿 +258 </option>
-      <option value="+243">🇨🇩 +243 </option>
-      <option value="+251">🇪🇹 +251 </option>
-      <option value="+252">🇸🇴 +252 </option>
-      <option value="+263">🇿🇼 +263 </option>
-      <option value="+267">🇧🇼 +267 </option>
-      <option value="+225">🇨🇮 +225 </option>
-      <option value="+221">🇸🇳 +221 </option>
-      <option value="+237">🇨🇲 +237 </option>
-    </select>
-    <input type="tel" placeholder="712345678" [(ngModel)]="recipientAccount" name="recipientAccount" />
-  </div>
-</div>
+        <div class="form-group" *ngIf="transferType === 'mpesa'">
+          <label>M-Pesa / Mobile Money Number</label>
+          <div class="phone-input-wrapper">
+            <select [(ngModel)]="countryCode" name="countryCode" title="Country Code" class="country-code-select">
+              <option value="+254">🇰🇪 +254</option>
+              <option value="+255">🇹🇿 +255</option>
+              <option value="+256">🇺🇬 +256</option>
+              <option value="+233">🇬🇭 +233</option>
+              <option value="+234">🇳🇬 +234</option>
+              <option value="+250">🇷🇼 +250</option>
+              <option value="+260">🇿🇲 +260</option>
+              <option value="+265">🇲🇼 +265</option>
+              <option value="+258">🇲🇿 +258</option>
+              <option value="+243">🇨🇩 +243</option>
+              <option value="+251">🇪🇹 +251</option>
+              <option value="+252">🇸🇴 +252</option>
+              <option value="+263">🇿🇼 +263</option>
+              <option value="+267">🇧🇼 +267</option>
+              <option value="+225">🇨🇮 +225</option>
+              <option value="+221">🇸🇳 +221</option>
+              <option value="+237">🇨🇲 +237</option>
+            </select>
+            <input type="tel" placeholder="712345678" [(ngModel)]="recipientAccount" name="recipientAccount" />
+          </div>
+        </div>
 
-  <div class="form-group">
-    <label>Recipient Name</label>
-    <input type="text" placeholder="Enter recipient name" [(ngModel)]="recipientName" name="recipientName" />
-  </div>
+        <div class="form-group">
+          <label>Recipient Name</label>
+          <input type="text" placeholder="Enter recipient name" [(ngModel)]="recipientName" name="recipientName" />
+        </div>
 
-  <div class="form-group">
-    <label>Amount ({{ currency }})</label>
-    <input type="number" placeholder="0.00" [(ngModel)]="amount" name="amount" />
-  </div>
+        <div class="form-group">
+          <label>Amount ({{ currencyService.currency() }})</label>
+          <input type="number" placeholder="0.00" [(ngModel)]="amount" name="amount" />
+        </div>
 
-  <div class="form-group">
-    <label>Reason (Optional)</label>
-    <input type="text" placeholder="e.g. Rent payment" [(ngModel)]="reason" name="reason" />
-  </div>
-</div>
+        <div class="form-group">
+          <label>Reason (Optional)</label>
+          <input type="text" placeholder="e.g. Rent payment" [(ngModel)]="reason" name="reason" />
+        </div>
+      </div>
 
-<div *ngIf="transferType === 'own'">
-  <div class="form-group">
-    <label>From Account</label>
-    <select [(ngModel)]="selectedAccount" name="selectedAccount" title="From Account">
-      <option *ngFor="let account of accounts" [value]="account.id">
-        {{ account.account_type }} Account - **** {{ account.account_number }} ({{ account.currency }} {{ account.balance | number:'1.2-2' }})
-      </option>
-    </select>
-  </div>
+      <div *ngIf="transferType === 'own'">
+        <div class="form-group">
+          <label>From Account</label>
+          <select [(ngModel)]="selectedAccount" name="selectedAccount" title="From Account">
+            <option *ngFor="let account of accounts" [value]="account.id">
+              {{ account.account_type }} Account - **** {{ account.account_number }} 
+            </option>
+          </select>
+        </div>
 
-  <div class="form-group">
-    <label>To Account</label>
-    <select [(ngModel)]="toAccount" name="toAccount" title="To Account">
-      <option *ngFor="let account of accounts" [value]="account.id">
-        {{ account.account_type }} Account - **** {{ account.account_number }} ({{ account.currency }} {{ account.balance | number:'1.2-2' }})
-      </option>
-    </select>
-  </div>
+        <div class="form-group">
+          <label>To Account</label>
+          <select [(ngModel)]="toAccount" name="toAccount" title="To Account">
+            <option *ngFor="let account of accounts" [value]="account.id">
+              {{ account.account_type }} Account - **** {{ account.account_number }} 
+            </option>
+          </select>
+        </div>
 
-  <div class="form-group">
-    <label>Amount ({{ currency }})</label>
-    <input type="number" placeholder="0.00" [(ngModel)]="amount" name="amount" />
-  </div>
+        <div class="form-group">
+          <label>Amount ({{ currencyService.currency() }})</label>
+          <input type="number" placeholder="0.00" [(ngModel)]="amount" name="amount" />
+        </div>
 
-  <div class="form-group">
-    <label>Reason (Optional)</label>
-    <input type="text" placeholder="e.g. Moving savings" [(ngModel)]="reason" name="reason" />
-  </div>
-</div>
+        <div class="form-group">
+          <label>Reason (Optional)</label>
+          <input type="text" placeholder="e.g. Moving savings" [(ngModel)]="reason" name="reason" />
+        </div>
+      </div>
+
       <button class="transfer-btn" (click)="sendMoney()">
         <span *ngIf="!loading">Send Money</span>
         <div class="bounce-dots" *ngIf="loading">
@@ -131,24 +132,24 @@
     </div>
 
     <div class="recent-transfers">
-  <h3>Recent Transfers</h3>
+      <h3>Recent Transfers</h3>
 
-  <div *ngIf="recentTransfers.length === 0" class="no-transfers">
-    <p>No transfers yet!!</p>
-  </div>
-
-  <div class="transfer-item" *ngFor="let transfer of recentTransfers">
-    <div class="t-info">
-      <div class="t-avatar">
-        {{ getInitials(transfer.recipient_name) }}
+      <div *ngIf="recentTransfers.length === 0" class="no-transfers">
+        <p>No transfers yet!!</p>
       </div>
-      <div>
-         <p>{{ transfer.recipient_name }}</p>
-         <small>**** {{ transfer.recipient_account.slice(-4) }} · {{ transfer.created_at | date:'d MMM' }}</small>
-         </div>
+
+      <div class="transfer-item" *ngFor="let transfer of recentTransfers">
+        <div class="t-info">
+          <div class="t-avatar">
+            {{ getInitials(transfer.recipient_name) }}
+          </div>
+          <div>
+            <p>{{ transfer.recipient_name }}</p>
+            <small>**** {{ transfer.recipient_account.slice(-4) }} · {{ transfer.created_at | date:'d MMM' }}</small>
+          </div>
         </div>
-       <span class="debit">- {{ transfer.currency }} {{ transfer.amount | number:'1.2-2' }}</span>
+        <span class="debit">- {{ currencyService.format(transfer.amount) }}</span>
       </div>
-     </div>
     </div>
   </div>
+</div>

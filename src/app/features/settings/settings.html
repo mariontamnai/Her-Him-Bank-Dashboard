@@ -129,16 +129,7 @@
           <span class="slider"></span>
         </label>
       </div>
-      <div class="settings-item">
-  <div class="settings-info">
-    <p>Push Notifications</p>
-    <small>Receive push notifications on your device</small>
-  </div>
-  <label class="toggle">
-    <input type="checkbox" [(ngModel)]="pushNotifications" (change)="enablePushNotifications()" aria-label="Push Notifications">
-    <span class="slider"></span>
-  </label>
-</div>
+      
     </div>
 
     <div class="settings-card">
@@ -160,7 +151,7 @@
           <p>Default Currency Display</p>
           <small>Choose your preferred currency</small>
         </div>
-        <select [(ngModel)]="currency" title="Currency" class="pref-select">
+        <select [ngModel]="currencyService.currency()" (ngModelChange)="currencyService.setCurrency($event)" title="Currency" class="pref-select">
           <option value="KES">🇰🇪 KES</option>
           <option value="USD">🇺🇸 USD</option>
           <option value="GBP">🇬🇧 GBP</option>

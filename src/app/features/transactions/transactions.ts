@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Bell, Search } from 'lucide-angular';
+import { CurrencyService } from '../../services/currency';
 import { supabase } from '../auth/login/supabase';
 
 @Component({
@@ -20,8 +21,7 @@ export class Transactions implements OnInit {
   activeFilter = 'all';
   searchQuery = '';
 
-  constructor(private cdr: ChangeDetectorRef) {}
-
+  constructor(private cdr: ChangeDetectorRef, public currencyService: CurrencyService) {}
   async ngOnInit() {
     const { data: { user } } = await supabase.auth.getUser();
 

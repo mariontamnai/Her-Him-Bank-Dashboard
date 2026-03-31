@@ -2,6 +2,12 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 
 const PROJECT_ID = 'her-him-bank';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
+};
+
 function toBase64Url(str: string): string {
   return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
@@ -16,7 +22,6 @@ function pemToArrayBuffer(pem: string): ArrayBuffer {
 
 async function getAccessToken(serviceAccount: any): Promise<string> {
   const now = Math.floor(Date.now() / 1000);
-
   const header = toBase64Url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
   const claim = toBase64Url(JSON.stringify({
     iss: serviceAccount.client_email,
@@ -58,52 +63,45 @@ async function getAccessToken(serviceAccount: any): Promise<string> {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders });
+  }
+
   try {
-    const payload = await req.json();
-    const record = payload.record;
+    const { token, topic } = await req.json();
 
-    if (!record) return new Response('No record found', { status: 400 });
-
-    const { recipient_name, amount, currency, type, user_id } = record;
+    if (!token || !topic) {
+      return new Response(JSON.stringify({ error: 'token and topic are required' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400
+      });
+    }
 
     const serviceAccount = JSON.parse(Deno.env.get('FIREBASE_SERVICE_ACCOUNT') ?? '{}');
     const accessToken = await getAccessToken(serviceAccount);
 
-    const isToken = user_id.includes(':');
-const message = {
-  message: {
-    ...(isToken ? { token: user_id } : { topic: user_id }),
-        notification: {
-          title: type === 'debit' ? 'Transfer Sent 💸' : 'Money Received 💰',
-          body: type === 'debit'
-            ? `${currency} ${amount} sent to ${recipient_name} successfully!`
-            : `You received ${currency} ${amount} from ${recipient_name}!`
-        },
-        data: { type, amount: amount.toString(), currency, recipient_name }
-      }
-    };
-
     const response = await fetch(
-      `https://fcm.googleapis.com/v1/projects/${PROJECT_ID}/messages:send`,
+      `https://iid.googleapis.com/iid/v1/${token}/rel/topics/${topic}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
-        },
-        body: JSON.stringify(message)
+          'Authorization': `Bearer ${accessToken}`,
+          'access_token_auth': 'true'
+        }
       }
     );
 
-    const result = await response.json();
-    return new Response(JSON.stringify({ success: true, result }), {
-      headers: { 'Content-Type': 'application/json' },
+    const text = await response.text();
+    return new Response(JSON.stringify({ success: true, status: response.status, result: text }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200
     });
 
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500
     });
   }

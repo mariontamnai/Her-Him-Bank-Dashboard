@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LucideAngularModule, Bell, } from 'lucide-angular';
+import { CurrencyService } from '../../services/currency';
 import { supabase } from '../auth/login/supabase';
-import { requestNotificationPermission, onMessage, messaging } from '../../firebase';
 
 @Component({
   selector: 'app-settings',
@@ -41,11 +41,9 @@ export class Settings implements OnInit {
   biometricLogin = false;
   biometricSupported = false;
   biometricRegistered = false;
-  fcmToken = '';
   language = 'english';
   currency = 'KES';
-
-  constructor(private cdr: ChangeDetectorRef, private router: Router) {}
+  constructor(private cdr: ChangeDetectorRef, private router: Router, public currencyService: CurrencyService) {}
 
   async checkBiometricSupport() {
   if (window.PublicKeyCredential) {
@@ -183,25 +181,8 @@ async savePhone() {
   }
   this.cdr.detectChanges();
 }
+  
 
-async enablePushNotifications() {
-  const token = await requestNotificationPermission();
-  if (token) {
-    this.fcmToken = token;
-    localStorage.setItem('fcmToken', token);
-    this.pushNotifications = true;
-    this.successMessage = 'Push notifications enabled!!';
-
-    onMessage(messaging, (payload) => {
-      console.log('Message received:', payload);
-      const { title, body } = payload.notification!;
-      new Notification(title!, { body, icon: '/favicon.ico' });
-    });
-  } else {
-    this.successMessage = 'Could not enable push notifications!!';
-  }
-  this.cdr.detectChanges();
-}
 
   async ngOnInit() {
     const { data: { user } } = await supabase.auth.getUser();

@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule, Bell, Search } from 'lucide-angular';
 import { supabase } from '../auth/login/supabase';
+import { CurrencyService } from '../../services/currency';
 
 @Component({
   selector: 'app-accounts',
@@ -17,7 +18,7 @@ export class Accounts implements OnInit {
   accounts: any[] = [];
   totalBalance = 0;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef, public currencyService: CurrencyService) {}
 
   async ngOnInit() {
     const { data: { user } } = await supabase.auth.getUser();
@@ -28,15 +29,15 @@ export class Accounts implements OnInit {
         ? fullName[0].toUpperCase()
         : fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
 
-        const { data: accounts } = await supabase
-          .from('Accounts')
-          .select('*')
-          .eq('user_id', user.id);
+      const { data: accounts } = await supabase
+        .from('Accounts')
+        .select('*')
+        .eq('user_id', user.id);
 
-        if (accounts) {
-          this.accounts = accounts;
-          this.totalBalance = accounts.reduce((sum, account) => sum + account.balance, 0);
-        }
+      if (accounts) {
+        this.accounts = accounts;
+        this.totalBalance = accounts.reduce((sum, account) => sum + account.balance, 0);
+      }
     }
     this.cdr.detectChanges();
   }

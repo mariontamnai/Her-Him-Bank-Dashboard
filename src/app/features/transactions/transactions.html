@@ -50,7 +50,7 @@
         {{ transaction.type | titlecase }}
       </span>
       <span [class.debit]="transaction.type === 'debit'" [class.credit]="transaction.type === 'credit'">
-        {{ transaction.type === 'debit' ? '-' : '+' }} {{ transaction.currency }} {{ transaction.amount | number:'1.2-2' }}
+        {{ transaction.type === 'debit' ? '-' : '+' }} {{ currencyService.format(transaction.amount) }}
       </span>
     </div>
   </div>
