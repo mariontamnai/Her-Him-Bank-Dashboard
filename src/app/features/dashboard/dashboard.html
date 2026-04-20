@@ -163,8 +163,9 @@
         <div class="loan-left">
           <p class="loan-label">Loan Offer 🎉</p>
           <h4>You qualify for</h4>
-          <p class="loan-amount">{{ currencyService.format(50000) }}</p>
+          <p class="loan-amount" *ngIf="maxLoan > 0">{{ currencyService.format(maxLoan) }}</p>
         </div>
+        <p class="loan-amount" *ngIf="maxLoan === 0">Not eligible yet</p>
         <button class="loan-btn" (click)="applyForLoan()">Apply Now</button>
       </div>
 

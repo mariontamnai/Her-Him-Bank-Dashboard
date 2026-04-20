@@ -46,6 +46,7 @@ export class DashboardComponent implements OnInit {
   searchResults: any[] = [];
   showSearch = false;
   cardFrozen = false;
+  maxLoan = 0;
 
   constructor(private cdr: ChangeDetectorRef, private router: Router, public currencyService: CurrencyService) {}
 

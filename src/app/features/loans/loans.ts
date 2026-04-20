@@ -19,6 +19,7 @@ export class Loans implements OnInit {
   successMessage = '';
   errorMessage = '';
   maxLoan = 0;
+  totalBalance = 0;
 
   constructor(private cdr: ChangeDetectorRef, public currencyService: CurrencyService) {}
 
@@ -54,6 +55,8 @@ export class Loans implements OnInit {
       if (accounts) {
         totalBalance = accounts.reduce((sum: number, acc: any) => sum + (acc.balance || 0), 0);
       }
+
+      this.totalBalance = totalBalance;
 
       this.maxLoan = totalBalance * 2;
 
