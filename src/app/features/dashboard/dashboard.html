@@ -3,14 +3,51 @@
   <div class="db-navbar">
     <div class="db-search">
       <lucide-icon [img]="Search" size="16" class="search-icon"></lucide-icon>
-      <input type="text" placeholder="Search transactions, accounts..." />
+      <input type="text" placeholder="Search transactions..." [(ngModel)]="searchQuery" (input)="onSearch()" />
+      <span class="clear-search" *ngIf="searchQuery" (click)="closeSearch()">✕</span>
     </div>
     <div class="db-nav-right">
-      <div class="notif-btn">
+      <div class="notif-btn" (click)="toggleNotifications()">
         <lucide-icon [img]="Bell" size="20"></lucide-icon>
-        <span class="notif-dot"></span>
+        <span class="notif-dot" *ngIf="notifications.length > 0"></span>
       </div>
-      <div class="nav-avatar">{{ userInitials }}</div>
+      <div class="nav-avatar" (click)="navigateTo('/profile')">{{ userInitials }}</div>
+    </div>
+  </div>
+
+  <div class="search-dropdown" *ngIf="showSearch">
+    <div *ngIf="searchResults.length === 0" class="search-empty">No results found</div>
+    <div class="search-item" *ngFor="let t of searchResults" (click)="navigateTo('/transactions'); closeSearch()">
+      <div class="search-item-left">
+        <span>{{ t.type === 'debit' ? '↑' : '↓' }}</span>
+        <div>
+          <p>{{ t.recipient_name }}</p>
+          <small>{{ t.created_at | date:'d MMM, h:mm a' }}</small>
+        </div>
+      </div>
+      <span [class]="t.type === 'debit' ? 'debit' : 'credit'">
+        {{ t.type === 'debit' ? '-' : '+' }} {{ currencyService.format(t.amount) }}
+      </span>
+    </div>
+  </div>
+
+  <div class="notif-dropdown" *ngIf="showNotifications">
+    <div class="notif-header">
+      <h4>Notifications</h4>
+      <span (click)="toggleNotifications()">✕</span>
+    </div>
+    <div *ngIf="notifications.length === 0" class="notif-empty">No notifications</div>
+    <div class="notif-item" *ngFor="let n of notifications">
+      <div class="notif-icon" [class.debit-bg]="n.type === 'debit'" [class.credit-bg]="n.type === 'credit'">
+        {{ n.type === 'debit' ? '↑' : '↓' }}
+      </div>
+      <div>
+        <p>{{ n.type === 'debit' ? 'Sent' : 'Received' }} {{ currencyService.format(n.amount) }}</p>
+        <small>{{ n.type === 'debit' ? 'To' : 'From' }} {{ n.recipient_name }} · {{ n.created_at | date:'d MMM' }}</small>
+      </div>
+    </div>
+    <div class="notif-footer" (click)="navigateTo('/transactions'); toggleNotifications()">
+      View all transactions
     </div>
   </div>
 
@@ -40,7 +77,7 @@
       <div class="q-icon"><lucide-icon [img]="Send" size="20"></lucide-icon></div>
       <span>Send Money</span>
     </button>
-    <button class="q-btn" (click)="navigateTo('/transfer')">
+    <button class="q-btn" (click)="navigateTo('/airtime')">
       <div class="q-icon"><lucide-icon [img]="Phone" size="20"></lucide-icon></div>
       <span>Buy Airtime</span>
     </button>
@@ -52,7 +89,7 @@
       <div class="q-icon"><lucide-icon [img]="Download" size="20"></lucide-icon></div>
       <span>Deposit</span>
     </button>
-    <button class="q-btn" (click)="navigateTo('/transfer')">
+    <button class="q-btn" (click)="navigateTo('/bills')">
       <div class="q-icon"><lucide-icon [img]="FileText" size="20"></lucide-icon></div>
       <span>Pay Bills</span>
     </button>
@@ -67,12 +104,14 @@
     <div class="db-card">
       <div class="card-header">
         <h3>Recent Transactions</h3>
-        <span class="see-all" (click)="navigateTo('/transactions')" style="cursor:pointer;">See all</span>
+        <span class="see-all" (click)="navigateTo('/transactions')">See all</span>
       </div>
       <ul class="t-list" *ngIf="recentTransactions.length > 0">
         <li *ngFor="let t of recentTransactions">
           <div class="t-left">
-            <div class="t-icon">{{ t.type === 'debit' ? '💸' : '💰' }}</div>
+            <div class="t-icon" [class.debit-icon]="t.type === 'debit'" [class.credit-icon]="t.type === 'credit'">
+              {{ t.type === 'debit' ? '↑' : '↓' }}
+            </div>
             <div>
               <p>{{ t.recipient_name }}</p>
               <small>{{ t.created_at | date:'d MMM, h:mm a' }}</small>
@@ -83,22 +122,25 @@
           </span>
         </li>
       </ul>
-      <p *ngIf="recentTransactions.length === 0" style="color:#6b7280;text-align:center;padding:20px;">No transactions yet!</p>
+      <p *ngIf="recentTransactions.length === 0" class="no-data">No transactions yet!</p>
     </div>
 
     <div class="db-right-col">
 
       <div class="virtual-card">
         <div class="vc-top">
-          <span class="vc-label">Visa Debit Card</span>
-          <span class="vc-badge">Active</span>
+          <span class="vc-label">
+            <lucide-icon [img]="CreditCard" size="14" style="margin-right:6px;"></lucide-icon>
+            Visa Debit Card
+          </span>
+          <span class="vc-badge" [class.frozen]="cardFrozen">{{ cardFrozen ? 'Frozen' : 'Active' }}</span>
         </div>
         <p class="vc-number">**** **** **** 4582</p>
         <div class="vc-bottom">
           <span>Expiry 10/27</span>
           <div class="vc-actions">
-            <button>Freeze</button>
-            <button>Details</button>
+            <button (click)="toggleCardFreeze()">{{ cardFrozen ? 'Unfreeze' : 'Freeze' }}</button>
+            <button (click)="showCardDetails()">Details</button>
           </div>
         </div>
       </div>
@@ -108,12 +150,12 @@
           <h3>Bills & Services</h3>
         </div>
         <div class="bills-grid">
-          <button class="bill-btn" (click)="navigateTo('/transfer')">⚡ KPLC</button>
-          <button class="bill-btn" (click)="navigateTo('/transfer')">📺 DSTV</button>
-          <button class="bill-btn" (click)="navigateTo('/transfer')">🌐 Internet</button>
-          <button class="bill-btn" (click)="navigateTo('/transfer')">💧 Water</button>
-          <button class="bill-btn" (click)="navigateTo('/transfer')">🏫 School</button>
-          <button class="bill-btn" (click)="navigateTo('/transfer')">➕ More</button>
+          <button class="bill-btn" (click)="navigateTo('/bills')">⚡ KPLC</button>
+          <button class="bill-btn" (click)="navigateTo('/bills')">📺 DSTV</button>
+          <button class="bill-btn" (click)="navigateTo('/bills')">🌐 Internet</button>
+          <button class="bill-btn" (click)="navigateTo('/bills')">💧 Water</button>
+          <button class="bill-btn" (click)="navigateTo('/bills')">🏫 School</button>
+          <button class="bill-btn" (click)="navigateTo('/bills')">➕ More</button>
         </div>
       </div>
 
@@ -123,7 +165,7 @@
           <h4>You qualify for</h4>
           <p class="loan-amount">{{ currencyService.format(50000) }}</p>
         </div>
-        <button class="loan-btn">Apply Now</button>
+        <button class="loan-btn" (click)="applyForLoan()">Apply Now</button>
       </div>
 
     </div>

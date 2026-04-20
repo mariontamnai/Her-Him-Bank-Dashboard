@@ -9,13 +9,15 @@ import { Settings } from './features/settings/settings';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 import { ResetPassword } from './features/auth/reset-password/reset-password';
+import { Bills } from './features/bills/bills';
 import { authGuard } from './core/auth-guard';
+import { Loans } from './features/loans/loans';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'reset-password', component: ResetPassword },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }, 
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: '',
     component: LayoutComponent,
@@ -26,7 +28,9 @@ export const routes: Routes = [
       { path: 'transfer', component: Transfer },
       { path: 'transactions', component: Transactions },
       { path: 'profile', component: Profile },
-      { path: 'settings', component: Settings}
+      { path: 'settings', component: Settings },
+      { path: 'bills', component: Bills },
+      { path: 'loans', component: Loans }
     ]
   }
 ];

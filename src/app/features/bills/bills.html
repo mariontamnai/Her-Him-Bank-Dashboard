@@ -1,0 +1,80 @@
+<div class="bills-content">
+  <div class="db-navbar">
+    <div class="db-search">
+      <lucide-icon [img]="Search" size="16" class="search-icon"></lucide-icon>
+      <input type="text" placeholder="Search bills..." />
+    </div>
+    <div class="db-nav-right">
+      <div class="notif-btn">
+        <lucide-icon [img]="Bell" size="20"></lucide-icon>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="nav-avatar">{{ userInitials }}</div>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <h1>Bills & Services</h1>
+    <p>Pay your bills quickly and easily</p>
+  </div>
+
+  <div class="bills-grid">
+    <div class="bill-card" *ngFor="let bill of bills" (click)="selectBill(bill)">
+      <div class="bill-icon" [style.background]="bill.color + '20'" [style.color]="bill.color">
+        {{ bill.icon }}
+      </div>
+      <div class="bill-info">
+        <p>{{ bill.name }}</p>
+        <small>{{ bill.description }}</small>
+      </div>
+      <span class="bill-category">{{ bill.category }}</span>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div class="modal-overlay" *ngIf="selectedBill" (click)="closeBill()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header" [style.background]="selectedBill.color">
+        <div class="modal-title">
+          <span class="modal-icon">{{ selectedBill.icon }}</span>
+          <div>
+            <h3>{{ selectedBill.name }}</h3>
+            <p>{{ selectedBill.description }}</p>
+          </div>
+        </div>
+        <button class="close-btn" (click)="closeBill()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+        <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+        <div class="form-group">
+          <label>From Account</label>
+          <select [(ngModel)]="selectedAccount" name="selectedAccount" title="From Account">
+            <option *ngFor="let account of accounts" [value]="account.id">
+              {{ account.account_type }} Account - **** {{ account.account_number }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="accountNumberInput">{{ selectedBill.id === 'airtime' ? 'Phone Number' : 'Account / Reference Number' }}</label>
+          <input id="accountNumberInput" type="text" placeholder="{{ selectedBill.id === 'airtime' ? 'e.g. 0712345678' : 'e.g. 12345678' }}" title="{{ selectedBill.id === 'airtime' ? 'Enter phone number' : 'Enter account or reference number' }}" [(ngModel)]="accountNumber" name="accountNumber" />
+        </div>
+
+        <div class="form-group">
+          <label>Amount ({{ currencyService.currency() }})</label>
+          <input type="number" placeholder="0.00" [(ngModel)]="amount" name="amount" />
+        </div>
+
+        <button class="pay-btn" [style.background]="selectedBill.color" (click)="payBill()">
+          <span *ngIf="!loading">Pay {{ selectedBill.name }}</span>
+          <div class="bounce-dots" *ngIf="loading">
+            <span></span><span></span><span></span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

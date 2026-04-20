@@ -1,0 +1,32 @@
+<div class="loan-page">
+
+  <h1>Apply for a Loan 💸</h1>
+  <p>Quick and easy loan application</p>
+
+  <div class="loan-card">
+
+    <div class="msg success" *ngIf="successMessage">{{ successMessage }}</div>
+    <div class="msg error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="form-group">
+      <label>Amount</label>
+      <input type="number" [(ngModel)]="amount" placeholder="Enter amount" />
+    </div>
+
+    <div class="form-group">
+      <label for="duration">Duration</label>
+      <select id="duration" [(ngModel)]="duration">
+        <option value="">Select duration</option>
+        <option value="3 months">3 Months</option>
+        <option value="6 months">6 Months</option>
+        <option value="12 months">12 Months</option>
+      </select>
+    </div>
+
+    <button (click)="applyLoan()">
+      <span *ngIf="!loading">Apply Now</span>
+      <span *ngIf="loading">Processing...</span>
+    </button>
+
+  </div>
+</div>

@@ -1,0 +1,58 @@
+.loan-page {
+  padding: 30px;
+}
+
+.loan-card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  max-width: 400px;
+  margin-top: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-top: 6px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #1a5c38;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.msg {
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.success {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.error {
+  background: #fef2f2;
+  color: #dc2626;
+}
