@@ -13,6 +13,10 @@
       <input type="number" [(ngModel)]="amount" placeholder="Enter amount" />
     </div>
 
+    <p class="loan-limit">
+  Max Loan: {{ currencyService.format(5000) }}
+</p>
+
     <div class="form-group">
       <label for="duration">Duration</label>
       <select id="duration" [(ngModel)]="duration">

@@ -18,6 +18,7 @@ export class Loans implements OnInit {
   loading = false;
   successMessage = '';
   errorMessage = '';
+  maxLoan = 0;
 
   constructor(private cdr: ChangeDetectorRef, public currencyService: CurrencyService) {}
 
@@ -32,29 +33,58 @@ export class Loans implements OnInit {
       return;
     }
 
-    if (parseFloat(this.amount) <= 0) {
+    const loanAmount = parseFloat(this.amount);
+
+    if (loanAmount <= 0) {
       this.errorMessage = 'Invalid amount!';
       return;
     }
-
+    
     this.loading = true;
 
     const { data: { user } } = await supabase.auth.getUser();
 
     if (user) {
+      const { data: accounts } = await supabase
+        .from('Accounts')
+        .select('balance')
+        .eq('user_id', user.id);
+
+      let totalBalance = 0;
+      if (accounts) {
+        totalBalance = accounts.reduce((sum: number, acc: any) => sum + (acc.balance || 0), 0);
+      }
+
+      this.maxLoan = totalBalance * 2;
+
+      let status = 'pending';
+
+      if (loanAmount <= totalBalance * 0.5) {
+        status = 'approved';
+      } else if (loanAmount > totalBalance * 2) {
+        status = 'rejected';
+      }
+
       const { error } = await supabase.from('Loans').insert([{
         user_id: user.id,
-        amount: parseFloat(this.amount),
+        amount: loanAmount,
         duration: this.duration,
-        status: 'pending'
+        status: status
       }]);
-
+        
       this.loading = false;
 
       if (error) {
         this.errorMessage = 'Loan request failed!';
       } else {
-        this.successMessage = 'Loan request submitted successfully!';
+        if (status === 'approved') {
+          this.successMessage = 'Loan approved! Funds will be disbursed shortly.';
+        } else if (status === 'pending') {
+          this.successMessage = 'Loan is under review.';
+        } else {
+          this.errorMessage = 'Loan request rejected!';
+        }
+
         this.amount = '';
         this.duration = '';
       }
